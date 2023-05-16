@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,11 +15,12 @@ public class PlayerMovement : MonoBehaviour
     private float limitSuperior;
     private float limitInferior;
     public int player_lives = 4;
+    Vector2 inputMovementPlayer;
     // Start is called before the first frame update
     void Start()
     {
-        if (up == KeyCode.None) up = KeyCode.UpArrow;
-        if (down == KeyCode.None) down = KeyCode.DownArrow;
+        //if (up == KeyCode.None) up = KeyCode.UpArrow;
+        //if (down == KeyCode.None) down = KeyCode.DownArrow;
         myRB = GetComponent<Rigidbody2D>();
         SetMinMax();
     }
@@ -24,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(up) && transform.position.y < limitSuperior)
+        /*if (Input.GetKey(up) && transform.position.y < limitSuperior)
         {
             myRB.velocity = new Vector2(0f, speed);
         }
@@ -35,7 +39,9 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             myRB.velocity = Vector2.zero;
-        }
+        }*/
+        Mathf.Clamp(transform.position.y,-4.5f,4.5f);
+        myRB.velocity = inputMovementPlayer * speed;
     }
 
     void SetMinMax()
@@ -51,5 +57,10 @@ public class PlayerMovement : MonoBehaviour
         {
             CandyGenerator.instance.ManageCandy(other.gameObject.GetComponent<CandyController>(), this);
         }
+    }
+    public void OnMovement(InputAction.CallbackContext value)
+    {
+        Vector2 inputMovement = value.ReadValue<Vector2>();
+        inputMovementPlayer = new Vector2(inputMovement.x, inputMovement.y);
     }
 }
