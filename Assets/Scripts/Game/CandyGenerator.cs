@@ -55,20 +55,24 @@ public class CandyGenerator : MonoBehaviour
             Destroy(candy_script.gameObject);
             return;
         }
-        if (candy_script.frame == 3)
-        {
-            SceneManager.LoadScene("GameOver");
-            return;
-        }
+        //Para Score
+        float score = player_script.player_puntaje;
+        int curretnscore =candy_script.puntaje;
+        score += curretnscore;
+        //Para vida
+        
         int lives = player_script.player_lives;
         int live_changer = candy_script.lifeChanges;
-        lives += live_changer;
-        print(lives);
+        lives =Mathf.Clamp(lives += live_changer,0,3);
+        //lives += live_changer;
+        
         if (lives <= 0)
         {
             SceneManager.LoadScene("GameOver");
         }
+        
         player_script.player_lives = lives;
+        player_script.player_puntaje = score;
         Destroy(candy_script.gameObject);
     }
 

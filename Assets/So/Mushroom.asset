@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0dbf05e805cda0648be58fc3ca2b851c, type: 3}
-  m_Name: HitSound
+  m_Name: Mushroom
   m_EditorClassIdentifier: 
-  myAudio: {fileID: 8300000, guid: 35a355f18d5135d4591885c718bcd33c, type: 3}
+  myAudio: {fileID: 8300000, guid: 9f439de018e64664fa3dbd8058c08045, type: 3}
   myGroup: {fileID: 3233065202339341006, guid: 4e3ef88e49bd15c4da3384850e3a6ec8, type: 2}

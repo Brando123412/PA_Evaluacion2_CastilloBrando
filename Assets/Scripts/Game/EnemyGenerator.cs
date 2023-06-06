@@ -7,7 +7,7 @@ public class EnemyGenerator : MonoBehaviour
 {
     public static EnemyGenerator instance;
     public List<GameObject> Enemy = new List<GameObject>();
-    private float time_to_create = 4f;
+    private float time_to_create = 2f;
     private float actual_time = 0f;
     private float limitSuperior;
     private float limitInferior;
@@ -33,11 +33,11 @@ public class EnemyGenerator : MonoBehaviour
         actual_time += Time.deltaTime;
         if (time_to_create <= actual_time)
         {
-            GameObject candy = Instantiate(Enemy[Random.Range(0, Enemy.Count)],
+            GameObject enemys = Instantiate(Enemy[Random.Range(0, Enemy.Count)],
             new Vector3(transform.position.x, Random.Range(limitInferior, limitSuperior), 0f), Quaternion.identity);
-            candy.GetComponent<Rigidbody2D>().velocity = new Vector2(-2f, 0);
+            enemys.GetComponent<Rigidbody2D>().velocity = new Vector2(-2f, 0);
             actual_time = 0f;
-            actual_enemys.Add(candy);
+            actual_enemys.Add(enemys);
         }
     }
 
@@ -48,27 +48,27 @@ public class EnemyGenerator : MonoBehaviour
         limitSuperior = (bounds.y * 0.9f);
     }
 
-    public void ManageCandy(CandyController candy_script, PlayerMovement player_script = null)
+    public void ManageEnemy(EnemyController enemy_script, PlayerMovement player_script = null)
     {
         if (player_script == null)
         {
-            Destroy(candy_script.gameObject);
+            Destroy(enemy_script.gameObject);
             return;
         }
-        if (candy_script.frame == 3)
-        {
-            SceneManager.LoadScene("GameOver");
-            return;
-        }
+
+        player_script.gameObject.transform.position= player_script.savePositionInitial;
+
+
         int lives = player_script.player_lives;
-        int live_changer = candy_script.lifeChanges;
-        lives += live_changer;
-        print(lives);
+        int live_changer = enemy_script.lifeChanges;
+        //lives -= live_changer;
+        //print(lives);
+        lives =Mathf.Clamp(lives -= live_changer,0,3);
         if (lives <= 0)
         {
             SceneManager.LoadScene("GameOver");
         }
         player_script.player_lives = lives;
-        Destroy(candy_script.gameObject);
+        Destroy(enemy_script.gameObject);
     }
 }

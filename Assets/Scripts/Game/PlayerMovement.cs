@@ -7,39 +7,35 @@ using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public KeyCode up;
-    public KeyCode down;
+    
     private Rigidbody2D myRB;
     [SerializeField]
     private float speed;
     private float limitSuperior;
     private float limitInferior;
-    public int player_lives = 4;
+    public int player_lives = 3;
+    public float player_puntaje =0;
     Vector2 inputMovementPlayer;
+    public Vector2 savePositionInitial;
+    [SerializeField] Soundscriptableobjects SoundDamage;
+    [SerializeField] SavePuntaje soPuntaje;
+    //AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
-        //if (up == KeyCode.None) up = KeyCode.UpArrow;
-        //if (down == KeyCode.None) down = KeyCode.DownArrow;
         myRB = GetComponent<Rigidbody2D>();
         SetMinMax();
+        savePositionInitial = transform.position;
+        //audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        /*if (Input.GetKey(up) && transform.position.y < limitSuperior)
-        {
-            myRB.velocity = new Vector2(0f, speed);
+        if(player_lives <=0){
+            soPuntaje.GuardarPuntaje(player_puntaje);
         }
-        else if (Input.GetKey(down) && transform.position.y > limitInferior)
-        {
-            myRB.velocity = new Vector2(0f, -speed);
-        }
-        else
-        {
-            myRB.velocity = Vector2.zero;
-        }*/
+        player_puntaje= player_puntaje+ 1*Time.deltaTime;
         Mathf.Clamp(transform.position.y,-4.5f,4.5f);
         myRB.velocity = inputMovementPlayer * speed;
     }
@@ -57,10 +53,17 @@ public class PlayerMovement : MonoBehaviour
         {
             CandyGenerator.instance.ManageCandy(other.gameObject.GetComponent<CandyController>(), this);
         }
+        else if (other.tag == "Enemy")
+        {
+            EnemyGenerator.instance.ManageEnemy(other.gameObject.GetComponent<EnemyController>(), this);
+            SoundDamage.CreateSound();
+        }
     }
     public void OnMovement(InputAction.CallbackContext value)
     {
         Vector2 inputMovement = value.ReadValue<Vector2>();
-        inputMovementPlayer = new Vector2(inputMovement.x, inputMovement.y);
+        inputMovementPlayer = new Vector2(/*inputMovement.x*/0,inputMovement.y);
     }
+
+
 }
